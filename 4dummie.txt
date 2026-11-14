@@ -1,0 +1,3 @@
+From src:
+javac -d out *.java
+java -cp out src.GUI
