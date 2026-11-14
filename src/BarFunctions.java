@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class BarFunctions {
 
     GUI gui;
+    private File currentFile = null;
 
     public BarFunctions(GUI gui) {
         this.gui = gui;
@@ -37,4 +39,46 @@ public class BarFunctions {
         }
     }
 
+    public void save() {
+        if (currentFile == null) {
+            saveAs();
+        } else {
+            writeToFile(currentFile);
+        }
+    }
+
+    public void saveAs() {
+        JFileChooser chooser = new JFileChooser();
+        // "Save" Button in the Dialog
+        chooser.setDialogTitle("Save as");
+        int result = chooser.showSaveDialog(gui.window);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selected = chooser.getSelectedFile();
+            // If already exists
+            if (selected.exists()) {
+                int overwrite = JOptionPane.showConfirmDialog(gui.window,
+                    "File already exists. Overvrite?",
+                    "Confirm Overwrite", JOptionPane.YES_NO_OPTION);
+                if (overwrite != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+            writeToFile(selected);
+        }
+    }
+
+    public void writeToFile(File file) {
+        try {
+            String content = gui.textArea.getText();  // Getting text from the text field
+            Files.writeString(file.toPath(), content);  // writing
+
+            gui.window.setTitle(file.getName() + " - Your Numpad");
+            currentFile = file;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(gui.window,
+                "Could not save file: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
