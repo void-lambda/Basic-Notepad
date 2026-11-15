@@ -16,13 +16,26 @@ import javax.swing.JTextArea;
 public class GUI implements ActionListener {
 
     JFrame window;
+
+    // TEXT AREA
     JTextArea textArea;
     JScrollPane scrollPane;
+    boolean wordWrapOn = false;
+
+    // TOP MENU BAR
     JMenuBar menuBar;
     JMenu menuFile, menuEdit, menuFormat, menuColor;
+
+    // FILE MENU
     JMenuItem iNew, iOpen, iSave, iSaveAs, iExit;
 
+    // FORMAT MENU
+    JMenuItem iWrap, iFontArial, iFontCSMS, iFontTNR,
+    iFontSize8, iFontSize12, iFontSize16, iFontSize20, iFontSize24, iFontSize28;
+    JMenu menuFont, menuFontSize;
+
     BarFunctions file = new BarFunctions(this);
+    Format_Function format = new Format_Function(this);
 
     public static void main(String[] args) {
         new GUI();
@@ -34,6 +47,12 @@ public class GUI implements ActionListener {
         createTextArea();
         createMenuBar();
         createFileMenu();
+        createFormatMenu();
+
+        // format.selectedFont = "Arial";
+        format.createFont(16);
+        format.wordWrap();
+        format.initDefaults();
 
         window.setVisible(true);
     }
@@ -52,6 +71,7 @@ public class GUI implements ActionListener {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         window.add(scrollPane);
     }
+
     public void createMenuBar() {
         menuBar = new JMenuBar();
         window.setJMenuBar(menuBar);
@@ -94,23 +114,99 @@ public class GUI implements ActionListener {
         menuFile.add(iExit);
     }
 
+    public void createFormatMenu() {
+        iWrap = new JMenuItem("Word Wrap: Off");
+        iWrap.addActionListener(this);
+        iWrap.setActionCommand("Word Wrap");
+        menuFormat.add(iWrap);
+
+        menuFont = new JMenu("Font");
+        menuFormat.add(menuFont);
+
+        // ARIAL
+        iFontArial = new JMenuItem("Arial");
+        iFontArial.addActionListener(this);
+        iFontArial.setActionCommand("Arial");
+        menuFont.add(iFontArial);
+
+        // CSMS
+        iFontCSMS = new JMenuItem("Comic Sans MS");
+        iFontCSMS.addActionListener(this);
+        iFontCSMS.setActionCommand("Comic Sans MS");
+        menuFont.add(iFontCSMS);
+
+        // Times New Roman
+        iFontTNR = new JMenuItem("Times New Roman");
+        iFontTNR.addActionListener(this);
+        iFontTNR.setActionCommand("Times New Roman");
+        menuFont.add(iFontTNR);
+
+        menuFontSize = new JMenu("Font Size");
+        menuFormat.add(menuFontSize);
+
+        // SIZE FONT 8
+        iFontSize8 = new JMenuItem("8");
+        iFontSize8.addActionListener(this);
+        iFontSize8.setActionCommand("size8");
+        menuFontSize.add(iFontSize8);
+
+        // SIZE FONT 12
+        iFontSize12 = new JMenuItem("12");
+        iFontSize12.addActionListener(this);
+        iFontSize12.setActionCommand("size12");
+        menuFontSize.add(iFontSize12);
+
+        // SIZE FONT 16
+        iFontSize16 = new JMenuItem("16");
+        iFontSize16.addActionListener(this);
+        iFontSize16.setActionCommand("size16");
+        menuFontSize.add(iFontSize16);
+
+        // SIZE FONT 20
+        iFontSize20 = new JMenuItem("20");
+        iFontSize20.addActionListener(this);
+        iFontSize20.setActionCommand("size20");
+        menuFontSize.add(iFontSize20);
+
+        // SIZE FONT 24
+        iFontSize24 = new JMenuItem("24");
+        iFontSize24.addActionListener(this);
+        iFontSize24.setActionCommand("size24");
+        menuFontSize.add(iFontSize24);
+
+        // SIZE FONT 28
+        iFontSize28 = new JMenuItem("28");
+        iFontSize28.addActionListener(this);
+        iFontSize28.setActionCommand("size28");
+        menuFontSize.add(iFontSize28);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String comand = e.getActionCommand();
 
         switch (comand) {
-            case "New":
-                file.newFile();
-                break;
-            case "Open":
-                file.open();
-                break;
-            case "Save":
-                file.save();
-                break;
-            case "SaveAs":
-                file.saveAs();
-                break;
+            // MENU BAR
+            case "New": file.newFile();  break;
+            case "Open": file.open();  break;
+            case "Save": file.save();  break;
+            case "SaveAs": file.saveAs();  break;
+            
+            case "Word Wrap": format.wordWrap();  break;
+            
+            // FONTS
+            case "Arial": format.setFont("Arial");  break;
+            case "Comic Sans MS": format.setFont("Comic Sans MS");  break;
+            case "Times New Roman": format.setFont("Times New Roman");  break;
+
+            // SIZE OF TEXT
+            case "size8": format.createFont(8);  break;
+            case "size12": format.createFont(12);  break;
+            case "size16": format.createFont(16);  break;
+            case "size20": format.createFont(20);  break;
+            case "size24": format.createFont(24);  break;
+            case "size28": format.createFont(28);  break;
+            
             default:
                 break;
         }

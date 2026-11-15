@@ -73,7 +73,7 @@ public class BarFunctions {
             String content = gui.textArea.getText();  // Getting text from the text field
             Files.writeString(file.toPath(), content);  // writing
 
-            gui.window.setTitle(file.getName() + " - Your Numpad");
+            gui.window.setTitle(file.getName() + " - Your Notepad");
             currentFile = file;
         } catch (IOException e) {
             JOptionPane.showMessageDialog(gui.window,
