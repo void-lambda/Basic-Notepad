@@ -58,7 +58,7 @@ public class BarFunctions {
             // If already exists
             if (selected.exists()) {
                 int overwrite = JOptionPane.showConfirmDialog(gui.window,
-                    "File already exists. Overvrite?",
+                    "File already exists. Overwrite?",
                     "Confirm Overwrite", JOptionPane.YES_NO_OPTION);
                 if (overwrite != JOptionPane.YES_OPTION) {
                     return;
@@ -79,6 +79,18 @@ public class BarFunctions {
             JOptionPane.showMessageDialog(gui.window,
                 "Could not save file: " + e.getMessage(),
                 "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void exit() {
+        int confirm = JOptionPane.showConfirmDialog(
+            gui.window,
+            "Are you sure you want to exit?",
+            "Exit",
+            JOptionPane.YES_NO_OPTION
+        );
+        if (confirm == JOptionPane.YES_OPTION) {
+            System.exit(0);
         }
     }
 }

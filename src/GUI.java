@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.undo.UndoManager;
 
 
 public class GUI implements ActionListener {
@@ -30,6 +31,7 @@ public class GUI implements ActionListener {
     JMenuItem iNew, iOpen, iSave, iSaveAs, iExit;
 
     // EDIT MENU
+    JMenuItem iUndo, iReDo;
 
     // FORMAT MENU
     JMenuItem iWrap, iFontArial, iFontCSMS, iFontTNR,
@@ -42,6 +44,10 @@ public class GUI implements ActionListener {
     BarFunctions file = new BarFunctions(this);
     Format_Function format = new Format_Function(this);
     Function_Color color = new Function_Color(this);
+    Function_Edit edit = new Function_Edit(this);
+
+
+    UndoManager um = new UndoManager();
 
     public static void main(String[] args) {
         new GUI();
@@ -55,6 +61,7 @@ public class GUI implements ActionListener {
         createFileMenu();
         createFormatMenu();
         createColorMenu();
+        createEditMenu();
 
         format.initDefaults();
         format.wordWrap();
@@ -71,6 +78,7 @@ public class GUI implements ActionListener {
 
     public void createTextArea() {
         textArea = new JTextArea();
+        textArea.getDocument().addUndoableEditListener(um);
         scrollPane = new JScrollPane(textArea,
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -117,7 +125,22 @@ public class GUI implements ActionListener {
         menuFile.add(iSaveAs);
 
         iExit = new JMenuItem("Exit");
+        iExit.addActionListener(this);
+        iExit.setActionCommand("Exit");
         menuFile.add(iExit);
+    }
+
+    public void createEditMenu() {
+        iUndo = new JMenuItem("Undo");
+        iUndo.addActionListener(this);
+        iUndo.setActionCommand("Undo");
+        menuEdit.add(iUndo);
+
+        iReDo = new JMenuItem("Redo");
+        iReDo.addActionListener(this);
+        iReDo.setActionCommand("Redo");
+        menuEdit.add(iReDo);
+
     }
 
     public void createFormatMenu() {
@@ -214,6 +237,11 @@ public class GUI implements ActionListener {
             case "Open": file.open();  break;
             case "Save": file.save();  break;
             case "SaveAs": file.saveAs();  break;
+            case "Exit": file.exit();  break;
+
+            // REDO & UNDO
+            case "Undo": edit.undo(); break;
+            case "Redo": edit.redo(); break;
             
             case "Word Wrap": format.wordWrap();  break;
             
@@ -223,7 +251,7 @@ public class GUI implements ActionListener {
             case "Times New Roman": format.setFont("Times New Roman");  break;
 
             // SIZE OF TEXT
-            case "size8": format.createFont(8);  break;
+            case "size8": format.createFont(8);    break;
             case "size12": format.createFont(12);  break;
             case "size16": format.createFont(16);  break;
             case "size20": format.createFont(20);  break;
@@ -231,9 +259,9 @@ public class GUI implements ActionListener {
             case "size28": format.createFont(28);  break;
 
             // COLOR
-            case "White": color.changeColor(comand);
-            case "Black": color.changeColor(comand);
-            case "Blue": color.changeColor(comand);
+            case "White": color.changeColor(comand); break;
+            case "Black": color.changeColor(comand); break;
+            case "Blue": color.changeColor(comand);  break;
             
             default:
                 break;
