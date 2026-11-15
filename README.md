@@ -16,4 +16,4 @@ For Linux:
 4. Enjoy
 
 For Mac:
-1. Mac sucks
+1. Only if you buy me a new macbook pro ;)

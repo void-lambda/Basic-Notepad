@@ -4,7 +4,9 @@ package src;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -12,6 +14,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
+
+import java.awt.Image;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class GUI implements ActionListener {
@@ -62,6 +68,9 @@ public class GUI implements ActionListener {
         createFormatMenu();
         createColorMenu();
         createEditMenu();
+
+        // Icon
+        setWindowIcon();
 
         format.initDefaults();
         format.wordWrap();
@@ -225,6 +234,20 @@ public class GUI implements ActionListener {
         iColor3.addActionListener(this);
         iColor3.setActionCommand("Blue");
         menuColor.add(iColor3);
+    }
+
+    // ICON
+    private void setWindowIcon() {
+        try (InputStream is = getClass().getResourceAsStream("/icon.png")) {
+            if (is == null) {
+                System.err.println("Icon not found: /icon.png");
+                return;
+            }
+            Image icon = ImageIO.read(is);
+            window.setIconImage(icon);
+        } catch (IOException e) {
+            System.err.println("Error loading icon: " + e.getMessage());
+        }
     }
 
     @Override
